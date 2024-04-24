@@ -1,0 +1,70 @@
+{
+  "playlist_name": "Chill Vibes",
+  "description": "Relax and unwind with these soothing tracks.",
+  "creator": {
+    "username": "user123",
+    "email": "user123@example.com"
+  },
+  "tracks": [
+    {
+      "track_name": "Sunset Lover",
+      "artist": "Petit Biscuit",
+      "album": {
+        "name": "Presence",
+        "release_date": "2015-11-13"
+      },
+      "duration_ms": 280000,
+      "popularity": 78,
+      "genres": ["Electronic", "Chillout"],
+      "explicit_content": false
+    },
+    {
+      "track_name": "Lost in Kyoto",
+      "artist": "Masego",
+      "album": {
+        "name": "Lady Lady",
+        "release_date": "2018-09-07"
+      },
+      "duration_ms": 226000,
+      "popularity": 65,
+      "genres": ["R&B", "Neo Soul"],
+      "explicit_content": false
+    },
+    {
+      "track_name": "Electric (feat. Khalid)",
+      "artist": "Alina Baraz",
+      "album": {
+        "name": "The Color of You",
+        "release_date": "2018-04-06"
+      },
+      "duration_ms": 188000,
+      "popularity": 82,
+      "genres": ["R&B", "Alternative"],
+      "explicit_content": false
+    },
+    {
+      "track_name": "Weightless",
+      "artist": "Marconi Union",
+      "album": {
+        "name": "Weightless (Ambient Transmission, Vol. 2)",
+        "release_date": "2014-10-16"
+      },
+      "duration_ms": 488000,
+      "popularity": 76,
+      "genres": ["Ambient", "Electronic"],
+      "explicit_content": false
+    },
+    {
+      "track_name": "Ocean Eyes",
+      "artist": "Billie Eilish",
+      "album": {
+        "name": "Ocean Eyes",
+        "release_date": "2016-11-18"
+      },
+      "duration_ms": 200000,
+      "popularity": 89,
+      "genres": ["Pop", "Electropop"],
+      "explicit_content": false
+    }
+  ]
+}
