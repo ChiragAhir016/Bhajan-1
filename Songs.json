@@ -1,4 +1,4 @@
-{
+[{
   "playlist_name": "Chill Vibes",
   "description": "Relax and unwind with these soothing tracks.",
   "creator": {
@@ -68,3 +68,26 @@
     }
   ]
 }
+{
+  "playlist_name": "Bhajan",
+  "description": "Bas tu raji tha.",
+  "creator": {
+  "username": "Prabodham",
+  "email": "Shrihari@example.com"
+  },
+  "tracks": [
+    {
+    "track_name": "Podhaniya",
+      "artist": "Chirag Ahir",
+      "album": {
+        "name": "I am Akshar",
+        "release_date": "2017-11-18"
+      },
+      "duration_ms": 230000,
+      "popularity": 86,
+      "genres": ["Pop", "Electronicsa"],
+      "explicit_content": false
+   }
+  ]
+}
+]
