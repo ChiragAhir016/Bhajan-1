@@ -105,5 +105,26 @@
       "explicit_content": false
    }
   ]
-}
+},
+  {    "playlist_name": "Kirtan",
+    "description": "Bolya shree hari re!",
+    "creator": {
+    "username": "HariPrabodham",
+    "email": "Shrihariprabodham@example.com"
+    },
+  "tracks": [
+    {
+    "track_name": "bhaktisudha",
+      "artist": "Swamiji",
+      "album": {
+        "name": "Harisumiran",
+        "release_date": "2017-11-30"
+      },
+      "duration_ms": 350000,
+      "popularity": 95,
+      "genres": ["Pop", "Electronicsa"],
+      "explicit_content": false
+   }
+  ]
+  }
 ]
