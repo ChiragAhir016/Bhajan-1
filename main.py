@@ -127,61 +127,82 @@ def duration_time(milliseconds):
 
 
 # Insert values from the  json data to  playlist table  in database
-curr.execute(sql.SQL("""
-    INSERT INTO playlist (playlist_name, description, creator_username, creator_email)
-    VALUES (%s, %s, %s, %s)
-    ON CONFLICT (playlist_name, creator_username) DO NOTHING
-    """),
-             (
-                 spotify_json['playlist_name'],
-                 spotify_json['description'],
-                 spotify_json['creator']['username'],
-                 spotify_json['creator']['email']
-             ))
-
-# Insert values from the  json data to  track table  in database
-for track in spotify_json['tracks']:
-    curr.execute(
-        sql.SQL("SELECT playlist_id FROM playlist WHERE playlist_name = %s AND creator_username = %s"),
-        (spotify_json['playlist_name'], spotify_json['creator']['username'])
-    )
-    result = curr.fetchone()
-
-    playlist_id = result[0] if result else None
-
-    if playlist_id is not None:
-        curr.execute(sql.SQL("""
-            INSERT INTO tracks (track_name,playlist_id, artist, album_name, album_release_date, duration_time, popularity, explicit_content)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-            ON CONFLICT (track_name, artist) DO NOTHING
-            """),
-                     (
-                         track['track_name'],
-                         playlist_id,
-                         track['artist'],
-                         track['album']['name'],
-                         track['album']['release_date'],
-                         duration_time(track['duration_ms']),
-                         track['popularity'],
-                         # track['genres'],
-                         track['explicit_content'],
-                     ))
-
-# Extract genre names from the JSON data
 genre_names = []
-for track in spotify_json['tracks']:
-    genre_names.extend(track['genres'])
-
-# Remove duplicate genre
-genre_names = list(set(genre_names))
-
-# Insert genre names into the genre table
-for genre_name in genre_names:
+# Insert values from the  json data to  playlist table  in database
+for playlist_data in spotify_json:
     curr.execute(sql.SQL("""
-        INSERT INTO genres (genres_name)
-        VALUES (%s)
-        ON CONFLICT (genres_name) DO NOTHING
-         """), (genre_name,))
+        INSERT INTO playlist (playlist_name, description, creator_username, creator_email)
+        VALUES (%s, %s, %s, %s)
+        ON CONFLICT (playlist_name, creator_username) DO NOTHING
+        """),
+                 (
+                     playlist_data['playlist_name'],
+                     playlist_data['description'],
+                     playlist_data['creator']['username'],
+                     playlist_data['creator']['email']
+                 ))
+
+    # Insert values from the  json data to  track table  in database
+    for track in playlist_data['tracks']:
+        genres_str = ','.join(track['genres'])
+        curr.execute(
+            sql.SQL("SELECT playlist_id FROM playlist WHERE playlist_name = %s AND creator_username = %s"),
+            (playlist_data['playlist_name'], playlist_data['creator']['username'])
+        )
+        result = curr.fetchone()
+
+        playlist_id = result[0] if result else None
+
+        if playlist_id is not None:
+            curr.execute(sql.SQL("""
+                        INSERT INTO tracks (track_name,playlist_id, artist, album_name, album_release_date, duration_time, popularity, explicit_content)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                        ON CONFLICT (track_name, artist) DO NOTHING
+                        """),
+                                     (
+                                         track['track_name'],
+                                         playlist_id,
+                                         track['artist'],
+                                         track['album']['name'],
+                                         track['album']['release_date'],
+                                         duration_time(track['duration_ms']),
+                                         track['popularity'],
+                                         # track['genres'],
+                                         track['explicit_content']
+                                     ))
+            curr.execute(sql.SQL("""
+                        SELECT track_id FROM tracks 
+                        WHERE track_name = %s AND artist = %s
+                    """), (
+                track['track_name'],
+                track['artist']
+            ))
+            track_id = curr.fetchone()[0]
+
+    # Extract genre names from the JSON data
+
+    for track in playlist_data['tracks']:
+        genre_names.extend(track['genres'])
+
+    # Remove duplicate genre
+    genre_names = list(set(genre_names))
+
+    # Insert genre names into the genre table
+    for genre_name in genre_names:
+        curr.execute(sql.SQL("""
+            INSERT INTO genres (genres_name)
+            VALUES (%s)
+            ON CONFLICT (genres_name) DO NOTHING
+             """), (genre_name,))
+
+        curr.execute(sql.SQL("""
+                        INSERT INTO track_genres (track_id, genres_id)
+                        SELECT %s, genres_id FROM genres
+                        WHERE genres_name = %s
+                    """), (
+            track_id,
+            genre_name
+        ))
 
 connection.commit()
 
